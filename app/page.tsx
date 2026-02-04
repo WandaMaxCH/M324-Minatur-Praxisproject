@@ -1,3 +1,16 @@
+'use client'
+
+import dynamic from 'next/dynamic'
+
+const Map = dynamic(() => import('./components/Map'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center">
+      <p className="text-gray-400 text-lg">Loading map...</p>
+    </div>
+  ),
+})
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
@@ -12,16 +25,16 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Map Placeholder */}
+        {/* Map Container */}
         <div className="max-w-6xl mx-auto">
           <div
             id="map"
-            className="w-full h-[600px] bg-white rounded-lg shadow-xl border-2 border-blue-200 flex items-center justify-center"
+            className="w-full h-[600px] bg-white rounded-lg shadow-xl border-2 border-blue-200 overflow-hidden"
           >
-            <p className="text-gray-400 text-lg">Map will load here</p>
+            <Map />
           </div>
         </div>
       </div>
     </main>
-  );
+  )
 }
