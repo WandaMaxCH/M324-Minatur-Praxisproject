@@ -4,30 +4,28 @@
 
 Interactive weather map application for Swiss cities with automated CI/CD pipeline.
 
+**Live Demo:** [weatherappdisplay.netlify.app](https://weatherappdisplay.netlify.app)
+
 ## Tech Stack
 
-- **Next.js 15** - App Router
-- **TypeScript** - Type safety
-- **Tailwind CSS** - Styling
-- **Leaflet** - Interactive maps
-- **react-leaflet** - React integration for Leaflet
-- **Open-Meteo API** - Weather data and geocoding
-- **lucide-react** - Weather icons
-- **Jest** - Testing framework
-- **React Testing Library** - Component testing
-- **GitHub Actions** - CI/CD automation
+| Category | Technology |
+|----------|------------|
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript |
+| UI | React 19, Tailwind CSS 3.4 |
+| Maps | Leaflet 1.9, react-leaflet 5 |
+| Icons | lucide-react |
+| Weather API | Open-Meteo (no API key required) |
+| Testing | Jest 30, React Testing Library |
+| CI/CD | GitHub Actions, Netlify |
 
 ## Getting Started
 
-Install dependencies:
-
 ```bash
+# Install dependencies
 npm install
-```
 
-Run the development server:
-
-```bash
+# Run development server
 npm run dev
 ```
 
@@ -36,145 +34,99 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Features
 
 ### Interactive Map
-
 - Leaflet map centered on Switzerland
-- Click anywhere on the map to place a marker and fetch weather
+- Click anywhere to place a marker and fetch weather
 - Smooth fly-to animation when selecting a city
-- OpenStreetMap tiles for map rendering
-- Dynamic import to avoid SSR issues
+- OpenStreetMap tiles
 
 ### City Search
-
-- Search bar with autocomplete for Swiss cities
+- Autocomplete search for Swiss cities
 - Powered by Open-Meteo Geocoding API
 - Debounced search (300ms) to reduce API calls
-- Max 5 city suggestions displayed
-- Click city to center map and fetch weather
+- Displays up to 5 suggestions
 
 ### Weather Display
-
-- **Current Weather Card**: Temperature, weather condition, humidity, wind speed
-- **24-Hour Forecast**: Hourly temperature and weather icons
-- **7-Day Forecast**: Daily min/max temperatures with weather conditions
-- Weather data from Open-Meteo Forecast API (icon_ch model)
-- Beautiful lucide-react weather icons
-- Automatic fetch when location is selected
+- **Current Weather**: Temperature, condition, humidity, wind speed
+- **24-Hour Forecast**: Hourly temperature with weather icons
+- **7-Day Forecast**: Daily min/max temperatures
+- Weather data from Open-Meteo API (icon_seamless model)
 
 ## Testing
 
-Run tests:
-
 ```bash
+# Run tests
 npm test
-```
 
-Run tests in watch mode:
-
-```bash
-npm test:watch
+# Run tests in watch mode
+npm run test:watch
 ```
 
 ## CI/CD Pipeline
 
 ### Continuous Integration
-
-Every Pull Request automatically runs:
-1. Install dependencies with npm ci
-2. Run all tests
-3. Build application
+Every push and PR to main runs:
+1. Install dependencies (`npm ci`)
+2. Run tests (`npm test`)
+3. Build application (`npm run build`)
 
 Configuration: `.github/workflows/ci.yml`
 
-All PRs must pass these checks before merging to main.
-
 ### Continuous Deployment
-
 Automatic deployment to Netlify on merge to main:
 - Configured via `netlify.toml`
-- Uses `@netlify/plugin-nextjs` for optimized Next.js builds
-- Environment variables managed in Netlify dashboard
+- Uses `@netlify/plugin-nextjs` for Next.js builds
+- Node.js 20
 
-## Deployment
-
-### Deploy to Netlify
-
-1. **Connect Repository:**
-   - Sign in to [Netlify](https://www.netlify.com/)
-   - Click "Add new site" → "Import an existing project"
-   - Connect your GitHub repository
-
-2. **Configure Build Settings:**
-   - Build command: `npm run build`
-   - Publish directory: `.next`
-   - The `netlify.toml` file will automatically configure these
-
-3. **Set Environment Variables:**
-   - Go to Site configuration → Environment variables
-   - Add: `NEXT_PUBLIC_APP_NAME` = `Swiss Weather App`
-
-4. **Deploy:**
-   - Click "Deploy site"
-   - Every push to main will automatically deploy
-
-### Environment Variables
-
-Required environment variables:
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `NEXT_PUBLIC_APP_NAME` | Application name displayed in footer | Swiss Weather App |
-
-**Note:** Open-Meteo API requires no API keys.
+**Live Site:** [https://weatherappdisplay.netlify.app](https://weatherappdisplay.netlify.app)
 
 ## Project Structure
 
 ```
-├── .github/
-│   └── workflows/
-│       └── ci.yml           # GitHub Actions CI workflow
+├── .github/workflows/
+│   └── ci.yml              # GitHub Actions CI workflow
 ├── app/
 │   ├── components/
-│   │   ├── Footer.tsx       # Footer with env variable
-│   │   ├── Map.tsx          # Leaflet map component
-│   │   ├── SearchBar.tsx    # City search with autocomplete
-│   │   └── WeatherDisplay.tsx # Weather data display
+│   │   ├── Footer.tsx      # Footer component
+│   │   ├── Map.tsx         # Leaflet map with click handler
+│   │   ├── SearchBar.tsx   # City search autocomplete
+│   │   └── WeatherDisplay.tsx  # Weather cards
 │   ├── lib/
-│   │   ├── geocoding.ts     # Geocoding API utilities
-│   │   └── weather.ts       # Weather API utilities
-│   ├── globals.css          # Tailwind CSS imports
-│   ├── layout.tsx           # Root layout
-│   ├── page.tsx             # Home page
-│   └── page.test.tsx        # Home page tests
-├── .env.local.example       # Example environment variables
-├── jest.config.ts           # Jest configuration
-├── jest.setup.ts            # Jest setup file
-├── netlify.toml             # Netlify deployment config
-├── tailwind.config.ts       # Tailwind configuration
-├── tsconfig.json            # TypeScript configuration
-└── package.json             # Dependencies and scripts
+│   │   ├── geocoding.ts    # Geocoding API
+│   │   └── weather.ts      # Weather API
+│   ├── globals.css         # Tailwind imports
+│   ├── layout.tsx          # Root layout
+│   ├── page.tsx            # Home page
+│   └── page.test.tsx       # Tests
+├── .env.local.example      # Environment variables template
+├── jest.config.ts          # Jest configuration
+├── netlify.toml            # Netlify deployment config
+├── tailwind.config.ts      # Tailwind configuration
+└── package.json            # Dependencies and scripts
 ```
-
-## Development Workflow
-
-1. Create feature branch from main
-2. Make changes and write tests
-3. Push branch and create Pull Request
-4. Wait for CI to pass (tests + build)
-5. Merge to main after approval
 
 ## Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm start` - Start production server
-- `npm test` - Run tests
-- `npm test:watch` - Run tests in watch mode
-- `npm run lint` - Run ESLint
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm start` | Start production server |
+| `npm test` | Run tests |
+| `npm run test:watch` | Run tests in watch mode |
+| `npm run lint` | Run ESLint |
 
-## APIs Used
+## Environment Variables
 
-- **Open-Meteo Forecast API** - Weather data (no API key required)
-- **Open-Meteo Geocoding API** - Swiss city search (no API key required)
+| Variable | Description |
+|----------|-------------|
+| `NEXT_PUBLIC_APP_NAME` | App name in footer (default: "Swiss Weather App") |
+
+## APIs
+
+- [Open-Meteo Forecast API](https://open-meteo.com/) - Weather data
+- [Open-Meteo Geocoding API](https://open-meteo.com/) - City search
+
+No API keys required.
 
 ## License
 
